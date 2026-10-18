@@ -231,6 +231,11 @@ ul.rules svg{flex:none;margin-top:4px;color:var(--ink)}
 .rp-tl li:after{content:"";position:absolute;left:15px;top:36px;bottom:2px;width:2px;background:var(--line)}
 .rp-tl li:last-child{padding-bottom:4px}.rp-tl li:last-child:after{display:none}
 .rp-ft{text-align:center;color:var(--muted);font-size:12px;margin:18px 0 4px;line-height:1.6}
+.cbar2{position:fixed;left:50%;transform:translate(-50%,12px);bottom:calc(100px + env(safe-area-inset-bottom,0px));width:calc(100% - 32px);max-width:420px;z-index:19;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 10px 10px 18px;border-radius:999px;background:var(--dark);color:var(--on-dark);box-shadow:0 10px 30px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:opacity .3s,transform .3s}
+.cbar2.on{opacity:1;pointer-events:auto;transform:translate(-50%,0)}
+.cbar2 div{display:grid;line-height:1.2}.cbar2 b{font-size:15px}.cbar2 span{font-size:12px;opacity:.7}
+.cbar2 .cta{width:auto;margin:0;padding:12px 20px;background:var(--accent);color:#fff;white-space:nowrap}
+@media (prefers-reduced-motion:reduce){.cbar2{transition:none}}
 </style>
 </head>
 <body>
@@ -440,7 +445,7 @@ function sendEmail(email,qi){
    Preenche os campos abaixo. Enquanto 'price' ou os números estiverem vazios, o pagamento fica desligado e o resultado é gratuito.
    Fluxo: a pessoa paga por M-Pesa/e-Mola, escreve a referência da transação e tu recebes o pedido por e-mail (Web3Forms).
    Depois de confirmares o pagamento, envias-lhe um código de desbloqueio (um por pessoa, lista no ficheiro Codigos_desbloqueio.txt). */
-const PAY={price:'',mpesa:'858440856',emola:'',name:''};
+const PAY={price:'',mpesa:'',emola:'863795665',name:''};
 const PAY_HASHES=["1xqn705wanr", "1x7z5gt7et0", "10nhvbt7rjj", "f0rfwz107g", "t6zgb6c3cl", "225v2m3oe2o", "st18wwcb9y", "fhpw6tlfzb", "2d7syebo2ts", "22d0nqz3tcg", "aknsfb76ic", "5mmanxizah", "15xlc7mu3jh", "zlgvg82a6a", "1105yxelvx8", "1wuk2ce70mz", "prr3dw6duk", "1ke388pgx6n", "1m0gqqirxu7", "2b15bz6ac60", "2eazgzdty45", "19qgzgv5xgm", "1aivbl9qlai", "7bbskhzwpc", "1bywpyqf4oy", "1c0wu67dm3i", "15tvwhb2zoh", "77rxqo0h8u", "1f7qok5as55", "nzrc0fdetg"];
 const payOn=()=>!!(PAY.price&&(PAY.mpesa||PAY.emola));
 const h53=(s,seed=0)=>{let h1=0xdeadbeef^seed,h2=0x41c6ce57^seed;for(let i=0,c;i<s.length;i++){c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677)}h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);return (4294967296*(2097151&h2)+(h1>>>0)).toString(36)};
@@ -652,7 +657,7 @@ const podium='<svg viewBox="0 0 200 130" width="200"><circle cx="100" cy="18" r=
 const arc=p=>`<svg viewBox="0 0 180 110" width="220"><path d="M20 90A70 70 0 0 1 160 90" stroke="var(--line)" stroke-width="12" stroke-linecap="round" fill="none"/><path d="M20 90A70 70 0 0 1 160 90" stroke="var(--accent)" stroke-width="12" stroke-linecap="round" fill="none" stroke-dasharray="${p*2.199} 220"/><text x="90" y="88" text-anchor="middle" font-size="30" font-weight="800" fill="currentColor">${p}%</text></svg>`;
 const catNow=()=>{const o={};S.run.list.slice(0,S.i).forEach((q,i)=>{if(!q.w)return;const c=o[q.c]||(o[q.c]={g:0,t:0});c.t+=q.w;if(S.ans[i])c.g+=q.w});return CATS.map(k=>o[k]?o[k].g/o[k].t:0)};
 const INTER={
-  9:()=>{const a=Math.max(1,Math.round((Date.now()-S.t0)/1000/S.i)),r=speedAnim(a);return {h:`Estás a responder mais depressa que o normal. <span id="spn">${a}</span> s por pergunta ⚡`,p:'As reações rápidas ajudam a adaptar-nos aos desafios e a decidir sob pressão, como notar detalhes ou reagir de imediato numa conversa.',v:r.html,run:r.run,wide:1}},
+  9:()=>{const a=Math.max(1,Math.round((Date.now()-S.t0)/1000/S.i)),r=speedAnim(a);return {h:`Estás a responder em média em <span id="spn">${a}</span> s por pergunta ⚡`,p:'As reações rápidas ajudam a adaptar-nos aos desafios e a decidir sob pressão, como notar detalhes ou reagir de imediato numa conversa.',v:r.html,run:r.run,wide:1}},
   18:()=>{const res=S.run.list.slice(0,S.i).map((q,i)=>q.w?!!S.ans[i]:null).filter(x=>x!==null),r=scoreAnim(res);return {h:`Já acertaste <span id="scn" style="font-variant-numeric:tabular-nums">${r.n}</span> de ${r.total} perguntas`,p:'Mantém o ritmo. Pontuações altas associam-se a raciocínio flexível e atenção ao detalhe.',v:r.html,run:r.run,wide:1}},
   27:()=>({h:'Já se vê um padrão na forma como pensas 👀',p:'Cada resposta acrescenta detalhes ao teu perfil cognitivo: como raciocinas, como memorizas e como resolves problemas. Faltam mais algumas respostas para o completares.',...(r=>({v:r.html,run:r.run,wide:1}))(radarAnim(catNow()))}),
   40:()=>{const total=S.run.list.length,left=total-S.i,pct=Math.round(S.i/total*100),r=almostAnim(S.i,total);return {h:`Estás quase! Faltam só ${left} perguntas ⚡`,p:`Já respondeste a ${pct}% das perguntas. Mais ${left} e a tua pontuação de QI fica pronta!`,v:r.html,run:r.run,wide:1}}
@@ -785,7 +790,7 @@ function card(key,{dark,letter,title,desc,n,status}){
       <div class="bar"><i style="width:${Math.max(pct,4)}%"></i></div></div></div>
   </button>`;
 }
-function count(k){return k==='all'?45:Math.min(12,BANK.filter(q=>GROUPS[k].cats.includes(q.c)).length)}
+function count(k){return k==='all'?totalFor():Math.min(12,BANK.filter(q=>GROUPS[k].cats.includes(q.c)).length)}
 function home(){
   S.tab='home';
   const last=store.get('last');
@@ -797,7 +802,7 @@ function home(){
     <div class="chips">
       <span class="chip">Completo <b>(${count('all')})</b></span>
       <span class="chip"><b>Dificuldade crescente</b></span>
-      <span class="chip">Cerca de <b>25 min</b></span>
+      <span class="chip">Cerca de <b>${Math.round(count('all')*.55)} min</b></span>
     </div>
     <div class="row"><button class="pill" data-start="all">${I.pen}Novo teste</button>
       <span class="count">${last?'Último QI: <b>'+last.iq+'</b>':'Sem resultados ainda'}</span></div>
@@ -830,23 +835,51 @@ function intro(key='all'){
 }
 
 /* ---------- Teste ---------- */
-function begin(key){
-  const nm=($('#name')||{}).value;
-  if(nm!=null){S.name=nm.trim();store.set('name',S.name)}
+const VER='r2:'+BANK.length;
+function totalFor(){const d=store.get('nTests')||0;return [20,30,40,45][Math.min(d,3)]}
+const interMap=L=>({[Math.round(L*.2)]:9,[Math.round(L*.4)]:18,[Math.round(L*.6)]:27,[L-5]:40});
+function seeded(seed){let a=seed>>>0;return()=>{a=(a+0x6D2B79F5)>>>0;let t=a;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+function build(key,seed,n){n=n||45;const kk=n>=40?3:n>=30?2:1;const orig=Math.random;Math.random=seeded(seed);try{
   const g=GROUPS[key];
   const pool=BANK.filter(q=>!g.cats||g.cats.includes(q.c)), wq=pool.find(q=>q.id==='word'), rest=pool.filter(q=>q.id!=='word');
   let list=[];
-  if(key==='all'){const Qt={1:6,2:7,3:9,4:10,5:7};for(const w in Qt)list.push(...shuffle(rest.filter(q=>q.w==w)).slice(0,Qt[w]))}
+  if(key==='all'){const T=n-kk-3,Qt={1:6,2:7,3:9,4:10,5:7},ws=Object.keys(Qt),al=ws.map(w=>Qt[w]*T/39),fl=al.map(Math.floor);
+    al.map((x,i)=>[x-fl[i],i]).sort((a,b)=>b[0]-a[0]).slice(0,T-fl.reduce((a,b)=>a+b,0)).forEach(([,i])=>fl[i]++);
+    ws.forEach((w,i)=>list.push(...shuffle(rest.filter(q=>q.w==w)).slice(0,fl[i])))}
   else list=shuffle(rest).slice(0,wq?11:12);
   if(wq)list.push(wq);
   list=list.map(q=>q.gen?{...q,...q.gen()}:q).sort((a,b)=>(a.id==='word')-(b.id==='word')||a.w-b.w);
-  if(key==='all'){const lk=shuffle(LKQ).slice(0,3);[3,14,26].forEach((p,i)=>list.splice(p,0,lk[i]));list.push(AGE,EDU)}
+  if(key==='all'){const lk=shuffle(LKQ).slice(0,kk),L=list.length+kk;lk.forEach((q,j)=>list.splice(Math.round((j+1)*L/(kk+1)),0,q));list.push(AGE,EDU)}
   list=list.map(q=>{
     if(q.span||q.fix||!q.o&&!q.vo)return {...q,order:(q.o||q.vo).map((_,i)=>i)};
     return {...q,order:shuffle((q.o||q.vo).map((_,i)=>i))};
   });
-  S.run={key,list,withWord:list.some(q=>q.id==='word')};
-  S.i=0;S.ans=[];S.tab='run';S.t0=Date.now();mark('teste_iniciado');
+  return list}finally{Math.random=orig}}
+function mkRun(key,seed,n){const list=build(key,seed,n);return {key,list,withWord:list.some(q=>q.id==='word'),seed,n,im:interMap(list.length)}}
+function saveRun(){
+  if(!S.run||S.run.done||S.tab!=='run')return;
+  store.set('run',{v:VER,key:S.run.key,seed:S.run.seed,n:S.run.n,i:S.i,ans:S.ans,el:Date.now()-S.t0,gender:S.gender||'',ws:S.ws||0,sn:S.sn,at:Date.now()});
+}
+function toast(t){const d=document.createElement('div');d.textContent=t;d.setAttribute('role','status');d.style.cssText='position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--dark);color:var(--on-dark);padding:12px 18px;border-radius:14px;font-size:14px;z-index:99;max-width:86vw;text-align:center;transition:opacity .4s';document.body.appendChild(d);setTimeout(()=>{d.style.opacity=0;setTimeout(()=>d.remove(),450)},3200)}
+function resume(){
+  const d=store.get('run');
+  if(!d||d.v!==VER||!GROUPS[d.key]||Date.now()-d.at>6*3600*1000)return false;
+  try{
+    const run=mkRun(d.key,d.seed,d.n),list=run.list;
+    if(!(d.i>=0&&d.i<list.length))throw 0;
+    if(d.sn===d.i&&list[d.i].span)list[d.i]._seen=true;
+    S.run=run;
+    S.i=d.i;S.ans=Array.isArray(d.ans)?d.ans.map(Boolean):[];S.gender=d.gender||'';S.ws=d.ws;S.sn=d.sn;S.tab='run';S.t0=Date.now()-(d.el||0);
+    renderNav();(S.run.withWord&&S.i===0&&!S.ws)?wordScreen():show();startTimer();
+    toast('Retomámos o teu teste onde ficaste');return true;
+  }catch(err){store.set('run',null);return false}
+}
+function begin(key){
+  const nm=($('#name')||{}).value;
+  if(nm!=null){S.name=nm.trim();store.set('name',S.name)}
+  const seed=(Math.random()*2147483647)>>>0,n=key==='all'?totalFor():0;
+  S.run=mkRun(key,seed,n);
+  S.i=0;S.ans=[];S.ws=0;S.sn=-1;S.tab='run';S.t0=Date.now();mark('teste_iniciado');saveRun();
   go(()=>{ renderNav(); S.run.withWord?wordScreen():show(); startTimer(); });
 }
 function exitAsk(){
@@ -890,7 +923,7 @@ function show(){
       <p class="hint" id="cd">Desaparece em <b>${left}</b> s</p></div>${foot()}</section>`;
     const id=setInterval(()=>{
       left--;
-      if(left<=0){clearInterval(id);q._seen=true;if(S.tab==='run'&&r.list[S.i]===q){swap(show)}}
+      if(left<=0){clearInterval(id);q._seen=true;S.sn=S.i;saveRun();if(S.tab==='run'&&r.list[S.i]===q){swap(show)}}
       else{const c=$('#cd');if(c)c.innerHTML='Desaparece em <b>'+left+'</b> s'}
     },1000);
     return;
@@ -912,10 +945,10 @@ function answer(i,btn){
   const q=S.run.list[S.i];
   btn.classList.add('sel');
   S.ans[S.i]=(i===q.a);
-  S.i++;
+  S.i++;saveRun();
   setTimeout(()=>{
     if(S.i>=S.run.list.length){finish();return}
-    const it=S.run.key==='all'&&INTER[S.i];
+    const it=S.run.key==='all'&&INTER[(S.run.im||{})[S.i]];
     if(it)swap(()=>inter(it()));else swap(show);
   },320);
 }
@@ -929,7 +962,7 @@ function inter(it){
 
 /* ---------- Resultado ---------- */
 const band=iq=>iq<85?'Abaixo da média':iq<95?'Média-baixa':iq<110?'Média':iq<120?'Média-alta':iq<130?'Superior':'Muito superior';
-function finish(){mark('teste_concluido');
+function finish(){mark('teste_concluido');if(S.run&&!S.run.done&&S.run.key==='all')store.set('nTests',(store.get('nTests')||0)+1);if(S.run)S.run.done=1;store.set('run',null);
   clearInterval(S.tick);
   const r=S.run, secs=Math.floor((Date.now()-S.t0)/1000);
   const tot=r.list.reduce((a,q)=>a+q.w,0), got=r.list.reduce((a,q,i)=>a+(S.ans[i]?q.w:0),0);
@@ -955,17 +988,19 @@ function results(res,animate){
       ${full?`<div class="n" id="num">${animate?70:res.iq}</div><div class="l">${band(res.iq)}</div><div class="r">Estimativa de QI · ${res.correct} de ${res.total} certas · ${fmt(res.secs)}</div>${bell(res.iq)}<div class="r">Estimativa acima de ${pc(res.iq)}% da população de referência (média 100)</div>`
             :`<div class="n" id="num">${animate?0:res.pct}%</div><div class="l">${GROUPS[res.key].name}</div><div class="r">${res.correct} de ${res.total} certas · ${fmt(res.secs)}</div>`}
     </div>
-    ${full&&Object.keys(res.cats).length>=3?`<div class="card-viz" style="margin-top:20px"><div style="font-weight:700">Perfil cognitivo</div>${radar(CATS.map(k=>(res.cats[k]||0)/100),1)}</div>`:''}<div class="cats">${catHTML}</div>
     ${full?certCard(res):''}
+    ${full&&Object.keys(res.cats).length>=3?`<div class="card-viz" style="margin-top:20px"><div style="font-weight:700">Perfil cognitivo</div>${radar(CATS.map(k=>(res.cats[k]||0)/100),1)}</div>`:''}<div class="cats">${catHTML}</div>
     ${full?repTeaser(res):''}
     <button class="cta" data-begin-direct="${res.key}">Repetir ${full?'o teste':'o módulo'}</button>
     ${full?'<button class="cta ghost" data-share>Partilhar resultado</button>':'<button class="cta ghost" data-start="all">Fazer o teste completo</button>'}
     <button class="cta ghost" data-nav="home">Voltar ao início</button>
     <p class="note">Metodologia: pontuação ponderada pela dificuldade de cada pergunta e comparada com uma população de referência (média 100, desvio-padrão 15). Resultado de carácter informativo, sem valor de avaliação psicológica.</p>
+  ${full&&!store.get('cert')?`<div class="cbar2" id="cbar2"><div><b>Certificado</b><span>Com o teu nome e QI</span></div><button class="cta" data-cert>Quero · ${esc(CERT.price)}</button></div>`:''}
   </section>`;
   const dlb=app.querySelector('[data-certdl]');if(dlb)dlb.addEventListener('click',()=>certDownload(res,store.get('certName')||S.name,app.querySelector('#rcm')));
   const rbn=app.querySelector('[data-rep]');if(rbn)rbn.addEventListener('click',()=>{if(!store.get('rep'))track('InitiateCheckout',{value:parseFloat(REP.price),currency:'MZN',content_name:'Relatório'});go(()=>repScreen(res))});
-  const cbn=app.querySelector('[data-cert]');if(cbn)cbn.addEventListener('click',()=>{if(!store.get('cert'))track('InitiateCheckout',{value:parseFloat(CERT.price),currency:'MZN',content_name:'Certificado'});go(()=>certScreen(res))});
+  app.querySelectorAll('[data-cert]').forEach(cbn=>cbn.addEventListener('click',()=>{if(!store.get('cert'))track('InitiateCheckout',{value:parseFloat(CERT.price),currency:'MZN',content_name:'Certificado'});go(()=>certScreen(res))}));
+  {const cb=$('#cbar2'),cc=$('#certcard');if(cb&&cc&&'IntersectionObserver' in window){new IntersectionObserver(es=>{cb.classList.toggle('on',!es[0].isIntersecting)},{threshold:.2}).observe(cc)}else if(cb)cb.classList.add('on')}
   requestAnimationFrame(()=>setTimeout(()=>{
     document.querySelectorAll('.bar i[data-w]').forEach(b=>b.style.width=Math.max(+b.dataset.w,3)+'%');
   },60));
@@ -1109,7 +1144,7 @@ function repBody(r){
 }
 function certCard(r){
   const d=!!store.get('cert'),nm=store.get('certName')||S.name;
-  return `<div class="card-viz" style="margin-top:20px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><b>O teu certificado</b>${d?'<span class="rp-e1" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px">✓ Desbloqueado</span>':''}</div>${certSVG(r,nm,!d)}${d?'<button class="cta" data-certdl style="margin-top:16px">Descarregar certificado</button><p class="pay-msg" id="rcm"></p><button class="cta ghost" data-cert style="margin-top:8px">Ver em ecrã inteiro</button>':`<p style="margin:14px 0 0;color:var(--muted);font-size:14px;line-height:1.5">Com o teu nome, a tua pontuação e um número único, para guardares e partilhares. ${esc(CERT.price)}, pagamento único.</p><button class="cta" data-cert style="margin-top:14px">Quero o meu certificado · ${esc(CERT.price)}</button>`}</div>`;
+  return `<div class="card-viz" id="certcard" style="margin-top:20px${d?'':';border:2px solid var(--accent)'}"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><b>O teu certificado</b>${d?'<span class="rp-e1" style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px">✓ Desbloqueado</span>':'<span style="font-size:11px;font-weight:700;padding:4px 10px;border-radius:99px;background:var(--accent);color:#fff">Disponível</span>'}</div>${certSVG(r,nm,!d)}${d?'<button class="cta" data-certdl style="margin-top:16px">Descarregar certificado</button><p class="pay-msg" id="rcm"></p><button class="cta ghost" data-cert style="margin-top:8px">Ver em ecrã inteiro</button>':`<p style="margin:14px 0 0;color:var(--muted);font-size:14px;line-height:1.5">Com o teu nome, a tua pontuação e um número único, para guardares e partilhares. ${esc(CERT.price)}, pagamento único.</p><button class="cta" data-cert style="margin-top:14px">Quero o meu certificado · ${esc(CERT.price)}</button>`}</div>`;
 }
 function repTeaser(r){
   const rows=repRows(r);if(!rows.length)return'';
@@ -1184,11 +1219,11 @@ document.addEventListener('click',e=>{
   else if(t.dataset.begin){S.gender=t.dataset.g||'';begin(t.dataset.begin)}
   else if(t.dataset.beginDirect){S.name=S.name;begin(t.dataset.beginDirect)}
   else if(t.dataset.ans!=null){answer(+t.dataset.ans,t)}
-  else if(t.dataset.word!=null){swap(show)}
+  else if(t.dataset.word!=null){S.ws=1;saveRun();swap(show)}
   else if(t.dataset.next!=null){swap(show)}
   else if(t.dataset.exit!=null){exitAsk()}
   else if(t.dataset.xno!=null){exitClose(true)}
-  else if(t.dataset.xyes!=null){exitClose(false);clearInterval(S.tick);S.run=null;go(()=>{home();renderNav()})}
+  else if(t.dataset.xyes!=null){store.set('run',null);exitClose(false);clearInterval(S.tick);S.run=null;go(()=>{home();renderNav()})}
   else if(t.dataset.about!=null){sheet(true)}
   else if(t.dataset.close!=null||t.id==='veil'){sheet(false)}
   else if(t.dataset.share!=null){
@@ -1200,7 +1235,8 @@ document.addEventListener('click',e=>{
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){sheet(false);if($('#xv'))exitClose(true)}});
 
-home();
+addEventListener('pagehide',saveRun);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')saveRun()});
+if(!resume())home();
 </script>
 </body>
 </html>
